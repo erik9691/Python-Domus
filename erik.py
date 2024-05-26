@@ -3,7 +3,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 # Read the data
-df = pd.read_csv("https://raw.githubusercontent.com/erik9691/mock-dataset/main/MOCK_DATA.csv")
+df = pd.read_csv("https://raw.githubusercontent.com/erik9691/mock-dataset/main/TAG_DATA.csv")
 
 # Convert strings separated by spaces into list for each row
 df['tags'] = df['tags'].apply(lambda x: x.split(' '))
