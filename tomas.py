@@ -17,13 +17,17 @@ def matches_listas(listaUsuarios, user_id):
         raise ValueError("El id de usuario no se encontró en la lista de usuarios.")
     
     user_tags = set(listaUsuarios[user_index]['tags'])  # Tags del usuario elegido
-    userPriorityPoints = []
+    userPriorityPoints = {}
     
     for i, user in enumerate(listaUsuarios):
         if i != user_index:  # Evitar comparar consigo mismo
             other_user_tags = set(user['tags'])
-            matches = len(user_tags.intersection(other_user_tags))  # Intersección con otros usuarios
-            userPriorityPoints.append((user['id'], matches))  # Guarda el id del usuario y la cantidad de matches
+            common_tags = user_tags.intersection(other_user_tags)  # Intersección con otros usuarios
+            matches = len(common_tags)
+            userPriorityPoints[user['id']] = {
+                'match_score': matches,
+                'common_tags': list(common_tags)
+            }
     
     return userPriorityPoints
 
@@ -38,11 +42,16 @@ df['tags'] = df['tags'].apply(lambda x: x.split())
 user_tag_lists = df.to_dict(orient='records')
 
 # id del usuario elegido (entre 1 y 750)
-chosen_user_id = 547  # Reemplaza con el id del usuario que deseas usar
+chosen_user_id = 1  # Reemplaza con el id del usuario que deseas usar
 
-# Calcula los matches y ordena las listas por la cantidad de matches
-matches_sorted = sorted(matches_listas(user_tag_lists, chosen_user_id), key=lambda x: x[1], reverse=True)
+# Calcula los matches y obtiene la información de matches
+user_matches = matches_listas(user_tag_lists, chosen_user_id)
+
+# Ordena los resultados por el puntaje de matches en orden descendente
+sorted_matches = sorted(user_matches.items(), key=lambda x: x[1]['match_score'], reverse=True)
 
 # Imprime los resultados ordenados
-for user_id, matches in matches_sorted:
-    print(f"El usuario {user_id} tiene {matches} matches.")
+print("Usuarios ordenados por matches:")
+for user_id, match_info in sorted_matches:
+    print(f"El usuario {user_id} tiene un puntaje de {match_info['match_score']} matches.")
+    print(f"Tags en común: {', '.join(match_info['common_tags'])}")
