@@ -6,7 +6,7 @@
 import pandas as pd
 
 def matches_listas(listaUsuarios, user_id):
-    # Encontrar el índice del usuario con el id dado
+    # Encontrar el index del usuario con el id dado
     user_index = -1
     for i, user in enumerate(listaUsuarios):
         if user['id'] == user_id:
@@ -34,7 +34,7 @@ def matches_listas(listaUsuarios, user_id):
 # Lee el archivo CSV con las dos columnas: id y tags
 df = pd.read_csv("https://raw.githubusercontent.com/erik9691/mock-dataset/main/TAG_DATA.csv", delimiter=',')
 
-# Asegúrate de que los ids son enteros y las tags son listas de strings
+# Revisamos que los ids son enteros y las tags son listas de strings
 df['id'] = df['id'].astype(int)
 df['tags'] = df['tags'].apply(lambda x: x.split())
 
@@ -54,4 +54,6 @@ sorted_matches = sorted(user_matches.items(), key=lambda x: x[1]['match_score'],
 print("Usuarios ordenados por matches:")
 for user_id, match_info in sorted_matches:
     print(f"El usuario {user_id} tiene un puntaje de {match_info['match_score']} matches.")
-    print(f"Tags en común: {', '.join(match_info['common_tags'])}")
+
+
+#INVESTIGAR CLUSTERING BUDDY!
