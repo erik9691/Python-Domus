@@ -19,7 +19,7 @@ tfidf_vectorizer = TfidfVectorizer()
 tfidf_matrix = tfidf_vectorizer.fit_transform(user_tags)
 
 # Compute cosine similarity between main user and all other users
-main_user_index = 4  # Assuming the main user is the first user in the list
+main_user_index = 4  # Assuming the main user is x user in the list (x = id+1)
 main_user_tfidf = tfidf_matrix[main_user_index]
 cosine_sim_with_main_user = cosine_similarity(main_user_tfidf, tfidf_matrix).flatten()
 
@@ -29,4 +29,5 @@ sorted_users = sorted(zip(cosine_sim_with_main_user, list_of_lists), reverse=Tru
 # Narrow the result to just the ids
 sorted_user_ids = [((user)[1])[0] for user in sorted_users]
 
-print(sorted_users)
+print(sorted_user_ids[0:10])
+print(sorted_users[0:10])
